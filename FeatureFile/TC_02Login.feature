@@ -1,6 +1,6 @@
 Feature: Login
-	
-#	@sanity
+
+  @sanity
   Scenario: user login
     Given user should navigated to login page
     When user enter valid username and password

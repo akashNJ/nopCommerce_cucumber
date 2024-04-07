@@ -1,5 +1,6 @@
 Feature: Registration
 
+  @sanity
   Scenario: User registration
     Given user is navigated to registration page
     When user enters registration details

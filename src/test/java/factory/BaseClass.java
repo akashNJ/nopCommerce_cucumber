@@ -3,13 +3,18 @@ package factory;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 import com.github.javafaker.Faker;
 
 public class BaseClass {
@@ -26,6 +31,22 @@ public class BaseClass {
 			default:System.out.println("No matching browser");
 			driver= null;
 			}
+
+		}
+		else if(getProperties().getProperty("execution_env").equals("remote")) {
+			DesiredCapabilities cap=new DesiredCapabilities();
+			switch(getProperties().getProperty("browser")) {
+			case "chrome":cap.setBrowserName("chrome");break;
+			case "edge":cap.setBrowserName("MicrosoftEdge");break;
+			default: System.out.println("No matching browser found");
+			driver=null;
+			}
+			switch(getProperties().getProperty("os")) {
+			case "windows":cap.setPlatform(Platform.WINDOWS);break;
+			case "mac":cap.setPlatform(Platform.MAC);break;
+			default: System.out.println("No matching os found");
+			}
+			driver=new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"),cap);
 
 		}
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
